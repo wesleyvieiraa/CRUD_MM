@@ -1,16 +1,15 @@
-from db import DataBase
+from DB import DataBase
 
 
 class Users:
 
     def __init__(self, id_user=0, name="", email="", tel=""):
-        # self.info = {}
         self.id_user = id_user
         self.name = name
         self.email = email
         self.tel = tel
 
-    def insertUser(self):
+    def insert_user(self):
 
         sql = DataBase()
         try:
@@ -18,7 +17,7 @@ class Users:
             c = sql.connection.cursor()
 
             c.execute("insert into users (name, email, tel) values ('" + self.name + "', '" +
-                      self.tel + "', '" + self.email + "' )")
+                      self.email + "', '" + self.tel + "' )")
 
             sql.connection.commit()
             c.close()
@@ -26,16 +25,13 @@ class Users:
         except:
             return "Ocorreu um erro na inserção do usuário."
 
-    def updateUser(self):
+    def update_user(self):
         sql = DataBase()
         try:
             c = sql.connection.cursor()
 
-            # c.execute("update users set name = '" + self.name + "', email = '" + self.email +
-            # "', tel = '" + self.tel + "' where iduser = '" + str(self.id_user) + "' ")
-
-            c.execute("update users set name = '" + self.name + "', tel = '" + self.tel + "', email = '" + self.email +
-                "' where iduser = " + str(self.id_user) + " ")
+            c.execute("update users set name = '" + self.name + "', email = '" + self.email +
+                      "', tel = '" + self.tel + "' where iduser = " + str(self.id_user) + " ")
 
             sql.connection.commit()
             c.close()
@@ -43,7 +39,7 @@ class Users:
         except:
             return "Ocorreu um erro na alteração do usuário"
 
-    def deleteUser(self):
+    def delete_user(self):
 
         sql = DataBase()
         try:
@@ -57,7 +53,7 @@ class Users:
         except:
             return "Ocorreu um erro na exclusão do usuário"
 
-    def selectUser(self, iduser):
+    def select_user(self, iduser):
         sql = DataBase()
         try:
             c = sql.connection.cursor()
@@ -67,14 +63,10 @@ class Users:
             for linha in c:
                 self.id_user = linha[0]
                 self.name = linha[1]
-                self.tel = linha[2]
-                self.email = linha[3]
+                self.email = linha[2]
+                self.tel = linha[3]
 
             c.close()
             return "Busca feita com sucesso!"
         except:
             return "Ocorreu um erro na busca do usuário"
-
-
-# teste = Users()
-# teste.insertUser()

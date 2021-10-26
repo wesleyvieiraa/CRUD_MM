@@ -1,6 +1,8 @@
 from tkinter import *
 
-from users import Users
+from Users import Users
+from ValidateEmail import ValidateEmail
+from ValidateTel import ValidateTel
 
 
 class App:
@@ -21,7 +23,7 @@ class App:
         self.id = Entry(interface, width="5")
         self.id.place(x=520, y=40)
 
-        self.button_search = Button(interface, text="Buscar", command=self.searchUser, width="10", background="#9932CC")
+        self.button_search = Button(interface, text="Buscar", command=self.search_user, width="10", background="#9932CC")
         self.button_search.place(x=580, y=35)
 
         self.text_name = Label(interface, text="Nome Completo:", font="Calibri", wraplength=500, justify=LEFT)
@@ -42,65 +44,85 @@ class App:
         self.tel = Entry(interface, width="15")
         self.tel.place(x=520, y=130)
 
-        self.button_insert = Button(interface, text="Inserir", command=self.insertUser, width="8", background="#9932CC")
+        self.button_insert = Button(interface, text="Inserir", command=self.insert_user, width="8", background="#9932CC")
         self.button_insert.place(x=520, y=180)
 
-        self.button_update = Button(interface, text="Alterar", command=self.updateUser, width="8", background="#9932CC")
+        self.button_update = Button(interface, text="Alterar", command=self.update_user, width="8", background="#9932CC")
         self.button_update.place(x=586, y=180)
 
-        self.button_delete = Button(interface, text="Excluir", command=self.deleteUser, width="8", background="#9932CC")
+        self.button_delete = Button(interface, text="Excluir", command=self.delete_user, width="8", background="#9932CC")
         self.button_delete.place(x=652, y=180)
 
         self.answer = Label(interface)
         self.answer.place(x=520, y=220)
 
-    def insertUser(self):
-        user = Users()
+    def insert_user(self):
+        tel = self.tel.get()
+        tel_object = ValidateTel(tel)
 
-        user.name = self.name.get()
-        user.email = self.email.get()
-        user.tel = self.tel.get()
+        email = self.email.get()
+        email_object = ValidateEmail(email)
 
-        self.answer["text"] = user.insertUser()
+        if email_object.validate_return() == False or tel_object.validate_return() == False:
+            self.answer["text"] = "E-mail ou telefone inválido"
+        else:
 
-        self.id.delete(0, END)
-        self.name.delete(0, END)
-        self.email.delete(0, END)
-        self.tel.delete(0, END)
+            user = Users()
 
-    def updateUser(self):
+            user.name = self.name.get()
+            user.email = email_object.format_email()
+            user.tel = tel_object.format_number()
+
+            self.answer["text"] = user.insert_user()
+
+            self.id.delete(0, END)
+            self.name.delete(0, END)
+            self.email.delete(0, END)
+            self.tel.delete(0, END)
+
+    def update_user(self):
+        tel = self.tel.get()
+        tel_object = ValidateTel(tel)
+
+        email = self.email.get()
+        email_object = ValidateEmail(email)
+
+        if email_object.validate_return() == False or tel_object.validate_return() == False:
+            self.answer["text"] = "E-mail ou telefone inválido"
+        else:
+
+            user = Users()
+
+            user.id_user = self.id.get()
+            user.name = self.name.get()
+            user.email = email_object.format_email()
+            user.tel = tel_object.format_number()
+
+            self.answer["text"] = user.update_user()
+
+            self.id.delete(0, END)
+            self.name.delete(0, END)
+            self.email.delete(0, END)
+            self.tel.delete(0, END)
+
+    def delete_user(self):
         user = Users()
 
         user.id_user = self.id.get()
-        user.name = self.name.get()
-        user.email = self.email.get()
-        user.tel = self.tel.get()
 
-        self.answer["text"] = user.updateUser()
+        self.answer["text"] = user.delete_user()
 
         self.id.delete(0, END)
         self.name.delete(0, END)
         self.email.delete(0, END)
         self.tel.delete(0, END)
 
-    def deleteUser(self):
-        user = Users()
-
-        user.id_user = self.id.get()
-
-        self.answer["text"] = user.deleteUser()
-
-        self.id.delete(0, END)
-        self.name.delete(0, END)
-        self.email.delete(0, END)
-        self.tel.delete(0, END)
-
-    def searchUser(self):
+    def search_user(self):
         user = Users()
 
         id_user = self.id.get()
 
-        self.answer["text"] = user.selectUser(id_user)
+        self.answer["text"] = user.select_user(id_user)
 
         self.id.delete(0, END)
         self.id.insert(INSERT, user.id_user)

@@ -33,7 +33,7 @@ $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 
 # Localize a pasta do projeto
 
-# Arraste para dentro do editor
+# Arraste para dentro do editor de código (Pycharm)
 
 # Selecione o interpretador do python como interpretador padrão
 
@@ -51,7 +51,7 @@ $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 ### Status
 
 <h2>
-  🚧 Em construção 🚧
+  Finalizado 🚀
 </h2>
 
 ### Licença

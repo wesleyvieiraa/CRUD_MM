@@ -25,5 +25,5 @@ class ValidateEmail:
     def format_email(self):
         pattern = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$"
         answer = re.search(pattern, self.complete_email)
-        format_number = answer.group()
-        return format_number
+        format_email = answer.group()
+        return format_email

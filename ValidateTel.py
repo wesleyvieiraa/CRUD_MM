@@ -25,5 +25,5 @@ class ValidateTel:
     def format_number(self):
         pattern = "([0-9]{2})([0-9]{5})([0-9]{4})"
         answer = re.search(pattern, self.number)
-        format_number = "({}){}-{}".format(answer.group(1), answer.group(2), answer.group(3))
+        format_number = answer.group()
         return format_number

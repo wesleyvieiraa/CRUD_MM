@@ -51,7 +51,7 @@ $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 ### Status
 
 <h2>
-  Finalizado 🚀
+  🚧 Em construção 🚧
 </h2>
 
 ### Licença

@@ -11,6 +11,7 @@ class ValidateTel:
     def validate_return(self):
         if self.validate_tel(self.tel):
             self.number = self.tel
+            return True
         else:
             return False
 

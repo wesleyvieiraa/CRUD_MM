@@ -3,14 +3,15 @@ import re
 
 class ValidateEmail:
     def __init__(self, email):
-        self.tel = email
+        self.email = email
 
     def __str__(self):
         return self.format_email()
 
     def validate_return(self):
-        if self.validate_email(self.tel):
-            self.complete_email = self.tel
+        if self.validate_email(self.email):
+            self.complete_email = self.email
+            return True
         else:
             return False
 

@@ -16,7 +16,7 @@ class App:
         self.container_header.pack(fill="x", side=TOP)
 
         self.logo_xicoria = Label(self.container_header, bd=0)
-        self.logo_xicoria.la = PhotoImage(file="logo_xicoria.png")
+        self.logo_xicoria.la = PhotoImage(file="Images/logo_xicoria.png")
         self.logo_xicoria["image"] = self.logo_xicoria.la
         self.logo_xicoria.place(x=200, y=0)
 
@@ -41,7 +41,7 @@ class App:
                                     bg="#f0f0f0",
                                     bd="0",
                                     command=self.search_user)
-        self.button_search.la = PhotoImage(file="button_search.png")
+        self.button_search.la = PhotoImage(file="Images/button_search.png")
         self.button_search["image"] = self.button_search.la
         self.button_search.place(x=250, y=55)
 
@@ -89,7 +89,7 @@ class App:
                                         bg="#f0f0f0",
                                         bd="0",
                                         command=self.search_address)
-        self.button_search_cep.la = PhotoImage(file="button_search.png")
+        self.button_search_cep.la = PhotoImage(file="Images/button_search.png")
         self.button_search_cep["image"] = self.button_search_cep.la
         self.button_search_cep.place(x=700, y=55)
 
@@ -141,14 +141,14 @@ class App:
         self.type = Entry(self.container_main, width="23")
         self.type.place(x=753, y=185)
 
-        self.answer = Label(self.container_main, fg="red", justify="center", bg="#F5E3AB")
-        self.answer.place(x=420, y=220)
+        self.answer = Label(self.container_main,width="30", fg="red", justify="center")
+        self.answer.place(x=400, y=220)
 
         self.button_insert = Button(self.container_main,
                                     bg="#f0f0f0",
                                     bd="0",
                                     command=self.insert_user)
-        self.button_insert.la = PhotoImage(file="button_insert.png")
+        self.button_insert.la = PhotoImage(file="Images/button_insert.png")
         self.button_insert["image"] = self.button_insert.la
         self.button_insert.place(x=370, y=250)
 
@@ -156,7 +156,7 @@ class App:
                                     bg="#f0f0f0",
                                     bd="0",
                                     command=self.update_user)
-        self.button_update.la = PhotoImage(file="button_update.png")
+        self.button_update.la = PhotoImage(file="Images/button_update.png")
         self.button_update["image"] = self.button_update.la
         self.button_update.place(x=460, y=250)
 
@@ -164,7 +164,7 @@ class App:
                                     bg="#f0f0f0",
                                     bd="0",
                                     command=self.delete_user)
-        self.button_delete.la = PhotoImage(file="button_delete.png")
+        self.button_delete.la = PhotoImage(file="Images/button_delete.png")
         self.button_delete["image"] = self.button_delete.la
         self.button_delete.place(x=554, y=250)
 
@@ -172,7 +172,7 @@ class App:
         self.container_footer.pack(fill="x", side=BOTTOM)
 
         self.logo_mm = Label(self.container_footer, bd=0)
-        self.logo_mm.la = PhotoImage(file="logo_mm.png")
+        self.logo_mm.la = PhotoImage(file="Images/logo_mm.png")
         self.logo_mm["image"] = self.logo_mm.la
         self.logo_mm.pack()
 
@@ -272,7 +272,7 @@ class App:
 
 
 interface = Tk()
-interface.iconbitmap("ico_mm.ico")
+interface.iconbitmap("Images/ico_mm.ico")
 interface.title("Usuários MM")
 interface.geometry("1300x700")
 App(interface)

@@ -2,29 +2,14 @@ import re
 
 
 class ValidateEmail:
-    def __init__(self, email):
-        self.email = email
 
-    def __str__(self):
-        return self.format_email()
-
-    def validate_return(self):
-        if self.validate_email(self.email):
-            self.complete_email = self.email
-            return True
-        else:
-            return False
-
-    def validate_email(self, email):
+    @staticmethod
+    def validate_email(email):
         pattern = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$"
         answer = re.findall(pattern, email)
         if answer:
-            return True
+            search = re.search(pattern, email)
+            format_email = search.group()
+            return format_email
         else:
             return False
-
-    def format_email(self):
-        pattern = r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$"
-        answer = re.search(pattern, self.complete_email)
-        format_email = answer.group()
-        return format_email

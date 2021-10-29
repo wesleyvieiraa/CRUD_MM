@@ -9,10 +9,10 @@ from ValidateAddress import ValidateAddress
 
 class App:
     def __init__(self, interface=None):
-        self.my_canvas = Frame(interface, bg="#F5E3AB")
-        self.my_canvas.pack(side=LEFT, fill=BOTH, expand=1)
+        self.canvas = Frame(interface, bg="#F5E3AB")
+        self.canvas.pack(side=LEFT, fill=BOTH, expand=1)
 
-        self.container_header = Frame(self.my_canvas, bg="#fec200", height="200")
+        self.container_header = Frame(self.canvas, bg="#fec200", height="200")
         self.container_header.pack(fill="x", side=TOP)
 
         self.logo_xicoria = Label(self.container_header, bd=0)
@@ -20,7 +20,7 @@ class App:
         self.logo_xicoria["image"] = self.logo_xicoria.la
         self.logo_xicoria.place(x=200, y=0)
 
-        self.container_main = Frame(self.my_canvas)
+        self.container_main = Frame(self.canvas)
         self.container_main.pack(fill="y", expand=True)
 
         font = tkFont.Font(family="open-sans", size=11)
@@ -77,13 +77,13 @@ class App:
         self.text_address["font"] = ("open-sans", "15", "bold")
         self.text_address.grid(row=0, column=1, sticky="we")
 
-        self.text_cep = Label(self.container_main,
-                              text="CEP:",
-                              font=font)
-        self.text_cep.place(x=550, y=55)
+        self.text_postal_code = Label(self.container_main,
+                                      text="CEP:",
+                                      font=font)
+        self.text_postal_code.place(x=550, y=55)
 
-        self.cep = Entry(self.container_main, width="9")
-        self.cep.place(x=620, y=60)
+        self.postal_code = Entry(self.container_main, width="9")
+        self.postal_code.place(x=620, y=60)
 
         self.button_search_cep = Button(self.container_main,
                                         bg="#f0f0f0",
@@ -133,15 +133,15 @@ class App:
         self.number = Entry(self.container_main, width="6")
         self.number.place(x=650, y=185)
 
-        self.text_type = Label(self.container_main,
-                               text="Tipo:",
-                               font=font)
-        self.text_type.place(x=702, y=180)
+        self.text_residence_type = Label(self.container_main,
+                                         text="Tipo:",
+                                         font=font)
+        self.text_residence_type.place(x=702, y=180)
 
-        self.type = Entry(self.container_main, width="23")
-        self.type.place(x=753, y=185)
+        self.residence_type = Entry(self.container_main, width="23")
+        self.residence_type.place(x=753, y=185)
 
-        self.answer = Label(self.container_main,width="30", fg="red", justify="center")
+        self.answer = Label(self.container_main, width="30", fg="red", justify="center")
         self.answer.place(x=400, y=220)
 
         self.button_insert = Button(self.container_main,
@@ -168,7 +168,7 @@ class App:
         self.button_delete["image"] = self.button_delete.la
         self.button_delete.place(x=554, y=250)
 
-        self.container_footer = Frame(self.my_canvas, bg="#fec200", height="100")
+        self.container_footer = Frame(self.canvas, bg="#fec200", height="100")
         self.container_footer.pack(fill="x", side=BOTTOM)
 
         self.logo_mm = Label(self.container_footer, bd=0)
@@ -178,17 +178,27 @@ class App:
 
     def insert_user(self):
         email = self.email.get()
-        email_object = ValidateEmail(email)
         tel = self.tel.get()
-        tel_object = ValidateTel(tel)
+        postal_code = self.postal_code.get()
+        email_object = ValidateEmail()
+        tel_object = ValidateTel()
+        postal_code_object = ValidateAddress()
 
-        if email_object.validate_return() \
-                and tel_object.validate_return():
+        if email_object.validate_email(email) \
+                and tel_object.validate_tel(tel) \
+                and postal_code_object.access_via_cep(postal_code):
             self.answer["text"] = ""
             user = Users()
             user.name = self.name.get()
-            user.email = email_object.format_email()
-            user.tel = tel_object.format_number()
+            user.email = email_object.validate_email(email)
+            user.tel = tel_object.validate_tel(tel)
+            user.postal_code = self.postal_code.get()
+            user.state = self.state.get()
+            user.city = self.city.get()
+            user.district = self.district.get()
+            user.street = self.street.get()
+            user.number = self.number.get()
+            user.residence_type = self.residence_type.get()
             self.answer["text"] = user.insert_user()
             self.delete_fields()
         else:
@@ -196,17 +206,27 @@ class App:
 
     def update_user(self):
         email = self.email.get()
-        email_object = ValidateEmail(email)
+        email_object = ValidateEmail()
         tel = self.tel.get()
-        tel_object = ValidateTel(tel)
+        tel_object = ValidateTel()
+        postal_code = self.postal_code.get()
+        postal_code_object = ValidateAddress()
 
-        if email_object.validate_return() \
-                and tel_object.validate_return():
+        if email_object.validate_email(email) \
+                and tel_object.validate_tel(tel) \
+                and postal_code_object.access_via_cep(postal_code):
             user = Users()
             user.id_user = self.id.get()
             user.name = self.name.get()
-            user.email = email_object.format_email()
-            user.tel = tel_object.format_number()
+            user.email = email_object.validate_email(email)
+            user.tel = tel_object.validate_tel(tel)
+            user.postal_code = self.postal_code.get()
+            user.state = self.state.get()
+            user.city = self.city.get()
+            user.district = self.district.get()
+            user.street = self.street.get()
+            user.number = self.number.get()
+            user.residence_type = self.residence_type.get()
             self.answer["text"] = user.update_user()
             self.delete_fields()
         else:
@@ -238,36 +258,46 @@ class App:
             self.name.insert(INSERT, user.name)
             self.email.insert(INSERT, user.email)
             self.tel.insert(INSERT, user.tel)
+            self.postal_code.insert(INSERT, user.postal_code)
+            self.state.insert(INSERT, user.state)
+            self.city.insert(INSERT, user.city)
+            self.district.insert(INSERT, user.district)
+            self.street.insert(INSERT, user.street)
+            self.number.insert(INSERT, user.number)
+            self.residence_type.insert(INSERT, user.residence_type)
 
     def delete_fields(self):
         self.id.delete(0, END)
         self.name.delete(0, END)
         self.email.delete(0, END)
         self.tel.delete(0, END)
+        self.postal_code.delete(0, END)
+        self.state.delete(0, END)
+        self.city.delete(0, END)
+        self.district.delete(0, END)
+        self.street.delete(0, END)
+        self.number.delete(0, END)
+        self.residence_type.delete(0, END)
 
     def search_address(self):
-        postal_code = self.cep.get()
-        postal_code_object = ValidateAddress(postal_code)
+        postal_code = self.postal_code.get()
+        postal_code_object = ValidateAddress()
 
-        if postal_code_object.validate_return():
-            if postal_code_object.access_via_cep():
-                self.answer["text"] = ""
-                uf, city, district, street = postal_code_object.access_via_cep()
+        if postal_code_object.access_via_cep(postal_code):
+            self.answer["text"] = ""
+            uf, city, district, street = postal_code_object.access_via_cep(postal_code)
 
-                self.state.insert(INSERT, uf)
-                self.city.insert(INSERT, city)
-                self.district.insert(INSERT, district)
-                self.street.insert(INSERT, street)
+            self.state.insert(INSERT, uf)
+            self.city.insert(INSERT, city)
+            self.district.insert(INSERT, district)
+            self.street.insert(INSERT, street)
 
-                self.number.focus_set()
-            else:
-                self.state.delete(0, END)
-                self.city.delete(0, END)
-                self.district.delete(0, END)
-                self.street.delete(0, END)
-                self.answer["text"] = "CEP inexistente"
+            self.number.focus_set()
         else:
-            self.delete_fields()
+            self.state.delete(0, END)
+            self.city.delete(0, END)
+            self.district.delete(0, END)
+            self.street.delete(0, END)
             self.answer["text"] = "CEP inválido"
 
 

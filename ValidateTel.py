@@ -2,29 +2,14 @@ import re
 
 
 class ValidateTel:
-    def __init__(self, tel):
-        self.tel = tel
 
-    def __str__(self):
-        return self.format_number()
-
-    def validate_return(self):
-        if self.validate_tel(self.tel):
-            self.number = self.tel
-            return True
-        else:
-            return False
-
-    def validate_tel(self, tel):
-        pattern = "([0-9]{2})([0-9]{5})([0-9]{4})"
+    @staticmethod
+    def validate_tel(tel):
+        pattern = "^\(?[1-9]{2}\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$"
         answer = re.findall(pattern, tel)
         if answer:
-            return True
+            search = re.search(pattern, tel)
+            number = search.group()
+            return number
         else:
             return False
-
-    def format_number(self):
-        pattern = "([0-9]{2})([0-9]{5})([0-9]{4})"
-        answer = re.search(pattern, self.number)
-        format_number = answer.group()
-        return format_number

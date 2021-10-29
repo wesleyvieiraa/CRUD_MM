@@ -4,6 +4,7 @@ import tkinter.font as tkFont
 from Users import Users
 from ValidateEmail import ValidateEmail
 from ValidateTel import ValidateTel
+from ValidateAddress import ValidateAddress
 
 
 class App:
@@ -33,7 +34,7 @@ class App:
                              font=font)
         self.text_id.place(x=50, y=55)
 
-        self.id = Entry(self.container_main, width="5")
+        self.id = Entry(self.container_main, width="5", justify="center")
         self.id.place(x=200, y=60)
 
         self.button_search = Button(self.container_main,
@@ -70,9 +71,8 @@ class App:
 
         self.text_warning_tel = Label(self.container_main, text="Insira apenas o DDD e número sem espaço")
         self.text_warning_tel["font"] = ("open-sans", "8")
-        self.text_warning_tel.place(x=200, y=177)
+        self.text_warning_tel.place(x=300, y=150)
 
-        # =====================================================================================================
         self.text_address = Label(self.container_main, text="Endereço:", width=40)
         self.text_address["font"] = ("open-sans", "15", "bold")
         self.text_address.grid(row=0, column=1, sticky="we")
@@ -80,18 +80,26 @@ class App:
         self.text_cep = Label(self.container_main,
                               text="CEP:",
                               font=font)
-        self.text_cep.place(x=550, y=60)
+        self.text_cep.place(x=550, y=55)
 
         self.cep = Entry(self.container_main, width="9")
-        self.cep.place(x=620, y=65)
+        self.cep.place(x=620, y=60)
+
+        self.button_search_cep = Button(self.container_main,
+                                        bg="#f0f0f0",
+                                        bd="0",
+                                        command=self.search_address)
+        self.button_search_cep.la = PhotoImage(file="button_search.png")
+        self.button_search_cep["image"] = self.button_search_cep.la
+        self.button_search_cep.place(x=700, y=55)
 
         self.text_state = Label(self.container_main,
                                 text="Estado:",
                                 font=font)
-        self.text_state.place(x=700, y=60)
+        self.text_state.place(x=802, y=55)
 
-        self.state = Entry(self.container_main, width="20")
-        self.state.place(x=770, y=65)
+        self.state = Entry(self.container_main, width="3", justify="center")
+        self.state.place(x=872, y=60)
 
         self.text_city = Label(self.container_main,
                                text="Cidade:",
@@ -128,12 +136,12 @@ class App:
         self.text_type = Label(self.container_main,
                                text="Tipo:",
                                font=font)
-        self.text_type.place(x=703, y=180)
+        self.text_type.place(x=702, y=180)
 
         self.type = Entry(self.container_main, width="23")
         self.type.place(x=753, y=185)
 
-        self.answer = Label(self.container_main, fg="red")
+        self.answer = Label(self.container_main, fg="red", justify="center", bg="#F5E3AB")
         self.answer.place(x=420, y=220)
 
         self.button_insert = Button(self.container_main,
@@ -176,6 +184,7 @@ class App:
 
         if email_object.validate_return() \
                 and tel_object.validate_return():
+            self.answer["text"] = ""
             user = Users()
             user.name = self.name.get()
             user.email = email_object.format_email()
@@ -209,6 +218,7 @@ class App:
         user.id_user = self.id.get()
 
         if user.id_user != "":
+            self.answer["text"] = ""
             self.answer["text"] = user.delete_user()
             self.delete_fields()
         else:
@@ -234,6 +244,31 @@ class App:
         self.name.delete(0, END)
         self.email.delete(0, END)
         self.tel.delete(0, END)
+
+    def search_address(self):
+        postal_code = self.cep.get()
+        postal_code_object = ValidateAddress(postal_code)
+
+        if postal_code_object.validate_return():
+            if postal_code_object.access_via_cep():
+                self.answer["text"] = ""
+                uf, city, district, street = postal_code_object.access_via_cep()
+
+                self.state.insert(INSERT, uf)
+                self.city.insert(INSERT, city)
+                self.district.insert(INSERT, district)
+                self.street.insert(INSERT, street)
+
+                self.number.focus_set()
+            else:
+                self.state.delete(0, END)
+                self.city.delete(0, END)
+                self.district.delete(0, END)
+                self.street.delete(0, END)
+                self.answer["text"] = "CEP inexistente"
+        else:
+            self.delete_fields()
+            self.answer["text"] = "CEP inválido"
 
 
 interface = Tk()

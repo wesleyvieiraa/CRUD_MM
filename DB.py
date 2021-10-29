@@ -11,10 +11,17 @@ class DataBase:
         c = self.connection.cursor()
 
         sql = """CREATE TABLE IF NOT EXISTS users (
-        iduser integer primary key autoincrement ,
+        id_user integer primary key autoincrement ,
         name text,
         email text,
-        tel text)"""
+        tel text,
+        postal_code text,
+        state text,
+        city text,
+        district text,
+        street text,
+        number text,
+        residence_type text)"""
 
         c.execute(sql)
         self.connection.commit()

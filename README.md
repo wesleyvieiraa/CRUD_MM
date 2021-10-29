@@ -35,7 +35,9 @@ $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 
 # Arraste para dentro do editor de código (Pycharm)
 
-# Selecione o interpretador do python como interpretador padrão
+# Certifique-se que o interpretador do python está selecionado como interpretador padrão
+
+# Instale a biblioteca "requests". Abra o terminal e execute o comando: pip install requests
 
 # Execute a aplicação
 

@@ -1,10 +1,8 @@
 from tkinter import *
 import tkinter.font as tkFont
-
+from tkinter import messagebox
 from Users import Users
-from ValidateEmail import ValidateEmail
-from ValidateTel import ValidateTel
-from ValidateAddress import ValidateAddress
+from Validators import Validate
 
 
 class App:
@@ -141,9 +139,6 @@ class App:
         self.residence_type = Entry(self.container_main, width="23")
         self.residence_type.place(x=753, y=185)
 
-        self.answer = Label(self.container_main, width="30", fg="red", justify="center")
-        self.answer.place(x=400, y=220)
-
         self.button_insert = Button(self.container_main,
                                     bg="#f0f0f0",
                                     bd="0",
@@ -179,19 +174,14 @@ class App:
     def insert_user(self):
         email = self.email.get()
         tel = self.tel.get()
-        postal_code = self.postal_code.get()
-        email_object = ValidateEmail()
-        tel_object = ValidateTel()
-        postal_code_object = ValidateAddress()
+        validator_object = Validate()
 
-        if email_object.validate_email(email) \
-                and tel_object.validate_tel(tel) \
-                and postal_code_object.access_via_cep(postal_code):
-            self.answer["text"] = ""
+        if self.validator():
             user = Users()
             user.name = self.name.get()
-            user.email = email_object.validate_email(email)
-            user.tel = tel_object.validate_tel(tel)
+            user.email = validator_object.validate_email(email)
+            user.email = validator_object.validate_email(email)
+            user.tel = validator_object.validate_tel(tel)
             user.postal_code = self.postal_code.get()
             user.state = self.state.get()
             user.city = self.city.get()
@@ -199,27 +189,22 @@ class App:
             user.street = self.street.get()
             user.number = self.number.get()
             user.residence_type = self.residence_type.get()
-            self.answer["text"] = user.insert_user()
+            messagebox.showinfo(title="Aviso", message=user.insert_user())
             self.delete_fields()
         else:
-            self.answer["text"] = "E-mail e/ou telefone inválido"
+            messagebox.showinfo(title="Aviso", message="E-mail e/ou telefone inválido")
 
     def update_user(self):
         email = self.email.get()
-        email_object = ValidateEmail()
         tel = self.tel.get()
-        tel_object = ValidateTel()
-        postal_code = self.postal_code.get()
-        postal_code_object = ValidateAddress()
+        validator_object = Validate()
 
-        if email_object.validate_email(email) \
-                and tel_object.validate_tel(tel) \
-                and postal_code_object.access_via_cep(postal_code):
+        if self.validator():
             user = Users()
             user.id_user = self.id.get()
             user.name = self.name.get()
-            user.email = email_object.validate_email(email)
-            user.tel = tel_object.validate_tel(tel)
+            user.email = validator_object.validate_email(email)
+            user.tel = validator_object.validate_tel(tel)
             user.postal_code = self.postal_code.get()
             user.state = self.state.get()
             user.city = self.city.get()
@@ -227,10 +212,10 @@ class App:
             user.street = self.street.get()
             user.number = self.number.get()
             user.residence_type = self.residence_type.get()
-            self.answer["text"] = user.update_user()
+            messagebox.showinfo(title="Aviso", message=user.update_user())
             self.delete_fields()
         else:
-            self.answer["text"] = "E-mail e/ou telefone inválido"
+            messagebox.showinfo(title="Aviso", message="E-mail e/ou telefone inválido")
 
     def delete_user(self):
         user = Users()
@@ -238,22 +223,18 @@ class App:
         user.id_user = self.id.get()
 
         if user.id_user != "":
-            self.answer["text"] = ""
-            self.answer["text"] = user.delete_user()
+            messagebox.showinfo(title="Aviso", message=user.delete_user())
             self.delete_fields()
         else:
-            self.answer["text"] = "Insira um id de usuário válido"
+            messagebox.showinfo(title="Aviso", message="Insira um id de usuário válido")
 
     def search_user(self):
         user = Users()
         id_user = self.id.get()
 
-        if id_user == "":
-            self.answer["text"] = "Insira um id de usuário"
-        else:
-            self.answer["text"] = user.select_user(id_user)
+        if id_user.isnumeric() and not id_user == "":
             self.delete_fields()
-
+            messagebox.showinfo(title="Aviso", message=user.select_user(id_user))
             self.id.insert(INSERT, user.id_user)
             self.name.insert(INSERT, user.name)
             self.email.insert(INSERT, user.email)
@@ -265,6 +246,8 @@ class App:
             self.street.insert(INSERT, user.street)
             self.number.insert(INSERT, user.number)
             self.residence_type.insert(INSERT, user.residence_type)
+        else:
+            messagebox.showinfo(title="Aviso", message="ID não encontrado")
 
     def delete_fields(self):
         self.id.delete(0, END)
@@ -281,11 +264,15 @@ class App:
 
     def search_address(self):
         postal_code = self.postal_code.get()
-        postal_code_object = ValidateAddress()
+        validator_object = Validate()
+        self.state.delete(0, END)
+        self.city.delete(0, END)
+        self.district.delete(0, END)
+        self.street.delete(0, END)
 
-        if postal_code_object.access_via_cep(postal_code):
-            self.answer["text"] = ""
-            uf, city, district, street = postal_code_object.access_via_cep(postal_code)
+        try:
+            validator_object.access_via_cep(postal_code)
+            uf, city, district, street = validator_object.access_via_cep(postal_code)
 
             self.state.insert(INSERT, uf)
             self.city.insert(INSERT, city)
@@ -293,12 +280,21 @@ class App:
             self.street.insert(INSERT, street)
 
             self.number.focus_set()
+        except:
+            messagebox.showinfo(title="Aviso", message="CEP inválido")
+
+    def validator(self):
+        email = self.email.get()
+        tel = self.tel.get()
+        postal_code = self.postal_code.get()
+        validator_object = Validate()
+
+        if validator_object.validate_email(email) \
+                and validator_object.validate_tel(tel) \
+                and validator_object.access_via_cep(postal_code):
+            return True
         else:
-            self.state.delete(0, END)
-            self.city.delete(0, END)
-            self.district.delete(0, END)
-            self.street.delete(0, END)
-            self.answer["text"] = "CEP inválido"
+            return False
 
 
 interface = Tk()

@@ -1,28 +1,34 @@
 import sqlite3
+from sqlite3 import Error
 
 
 class DataBase:
 
     def __init__(self):
-        self.connection = sqlite3.connect("DataBase.db")
-        self.createTable()
+        self.connection()
 
-    def createTable(self):
-        c = self.connection.cursor()
+    def connection(self):
+        connection = None
+        try:
+            connection = sqlite3.connect("DataBase.db")
+        except Error as ex:
+            print(ex)
+        return connection
 
-        sql = """CREATE TABLE IF NOT EXISTS users (
-        id_user integer primary key autoincrement ,
-        name text,
-        email text,
-        tel text,
-        postal_code text,
-        state text,
-        city text,
-        district text,
-        street text,
-        number text,
-        residence_type text)"""
+    def dql(self, query):
+        connection = self.connection()
+        cursor = connection.cursor()
+        cursor.execute(query)
+        select = cursor.fetchall()
+        connection.close()
+        return select
 
-        c.execute(sql)
-        self.connection.commit()
-        c.close()
+    def dml(self, query):
+        try:
+            connection = self.connection()
+            cursor = connection.cursor()
+            cursor.execute(query)
+            connection.commit()
+            connection.close()
+        except Error as ex:
+            return ex

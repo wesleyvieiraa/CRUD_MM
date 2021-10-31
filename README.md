@@ -31,15 +31,17 @@ Além disto é bom ter um editor para trabalhar com o código como [Pycharm](htt
 # Clone este repositório
 $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 
-# Localize a pasta do projeto
-
-# Arraste para dentro do editor de código (Pycharm)
+# Localize a pasta do projeto e abra a pasta com o Pycharm 
 
 # Certifique-se que o interpretador do python está selecionado como interpretador padrão
 
+# Se for necessário incluir o interpretador, navegue até File> Settings> Project: CRUD_MM> Python Interpreter> ícone de engrenagem> Add. No campo "Base interpreter" insira o interpretador do Python, no Windows normalmente está localizado em: C:\Users\Nome_de_usuario\AppData\Local\Programs\Python\Python310\python.exe
+
 # Instale a biblioteca "requests". Abra o terminal e execute o comando: pip install requests
 
-# Execute a aplicação
+# Instale o package requests. Uma maneira fácil é abrir o arquivo "Validator.py", selecionar o ícone de sugestão> Install package requests
+
+# Execute App.py
 
 ```
 ### Tecnologias
@@ -53,7 +55,7 @@ $ git clone https://github.com/wesleyvieiraa/CRUD_MM.git
 ### Status
 
 <h2>
-  🚧 Em construção 🚧
+ Finalizado 🚀
 </h2>
 
 ### Licença
